@@ -222,6 +222,7 @@ We'll have another action to remove the alerts
 */
 
 const express = require("express"); //bring in express
+const cors = require('cors');
 const connectDB = require("./config/db"); //bring in db.js from folder 'config'
 const path = require("path");
 
@@ -231,6 +232,7 @@ connectDB(); // Connect Database
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(cors());
 
 // Define Routes
 app.use("/api/users", require("./routes/api/users")); //this makes '/api/users' pertain to the '/' in the router.get() call in 'users.js' in 'routes/api/'
