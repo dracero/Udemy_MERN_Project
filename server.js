@@ -241,12 +241,12 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
 
 // Serve static assets in production
-//if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   // Set static folder
-  //app.use(express.static("client/build")); //we want our client/build folder to be our static folder
+  app.use(express.static("client/build")); //we want our client/build folder to be our static folder
 
   //now we want to serve the index.html file
-  //app.get("*", (req, res) => {
+  app.get("*", (req, res) => {
     //so we get from '*' (meaning any routes except the api routes above)
     //res.sendFile(path.resolve(__dirname, "client", "build", "index.html")); //we use sendFile() because we just want to load the index.html file
     //we use path.resolve() to cleanly load it
