@@ -69,80 +69,56 @@ to create a model, you must create a schema, which just holds all the fields we 
 /*
 POSTMAN:
 the url we put into our Postman when locally testing is "http://localhost:<PORT>" followed by whatever extension there is to the url
-
 we are using Postman to GET and POST
 to GET data, we put the url we want to get data from into a GET request
 to POST data, or send data, we put the url we want to send data to into a POST request
-
 we want to separate our resources for our endpoints into collections in Postman
 collections are folders that can hold different requests
 we created 3 collections in our Postman: "Posts", "Profiles", and "Users & Auth"
-
 when we sent data, we want our request to have a Key of 'content-type' and a Value of 'application/json'
-
 Requests we have saved:
 POST request to our "Users & Auth" collection called "Register User"
 this way, whenever we want to make a request with the specific information that we saved, we can easily register a user with that information
 this request's Header has a Key of 'content-type' with a Value of 'application/json'
 in the Body we chose 'raw' and send json with a name, an email, and a password
-
 GET request to our "Users & Auth" collection called "Get auth user" so we can get an authenticated users info at any time by using their token
 this request's Header has a Key of 'x-auth-token' with a Value of the token of one of the users
-
 POST request to our "Users & Auth" collection called "Login User" so we can login with our user
 this request's Header has a Key of 'content-type' and a Value of 'application/json' and we gave the body a raw json with a valid email and password
-
 GET request to our "Profiles" collection called "Get logged in user's profile" so we can get the profile of a user who is logged in via their key
 this request's Header has a Key of 'x-auth-token' and a Value of the token of one of the users
-
 POST request to our "Profiles" collection called "Create or Update a Profile" so we can create or update a profile for a user
 this request's Header has a Key of 'content-type' and a Value of 'application/json' and another Key of 'x-auth-token' and a Value of the token of one of the users
 we created a preset for a Key of 'x-auth-token' and Value of the token for one of the users since we use it a lot so that we don't have to go get the token every time
 and we created a preset for a Key of 'content-type' and a Value of 'application/json' since we use that a lot
 in the Body we chose 'raw' and send json with profile fields excluding education and experiences
-
 GET request to our "Profiles" collection called "Get all profiles" to get a list of all profiles and their information
-
 GET request to our "Profiles" collection called "Get Profile by user ID" to get a user by adding '/user/<user_id>' to the url
-
 DELETE request to our "Profiles" collection called "Delete profile and user" to delete a user and their profile (this will also delete their posts later)
 this request's Header has a Key of 'x-auth-token' with a Value of the token of one of the users we want to delete
-
 PUT request to our "Profiles" collection called "Add experience" to add an experience to the user's profile
 this request's Header has our 'JSON Content Type' and 'Matt's Token' presets (although any user's token can be used as the Value for the 'x-auth-token' Key)
 the Body has a raw json with experience fields
-
 DELETE request to our "Profiles" collection called "Delete experience" to remove an experience from the user's profile by adding '/user/<exp_id>' to the url
 this request's Header has a Key of 'x-auth-token' with a Value of the token of the user who's experience we want to delete
 the experience with an id matching the id provided in the url will be deleted
-
 PUT for education like for experiences
-
 DELETE for education like for experiences
-
 GET request to our "Profiles" collection called "Get Github repos" for getting github repos by adding '/github/<github_username>' to the url after 'api/profile'
-
 POST request to our "Posts" collection called "Add post" for adding a post
 you need to be logged in to make a post and you need to submit a json with the field "text" filled in
-
 GET request to our "Posts" collection called "Get all posts" for getting all posts
 you need to be logged in to see posts
-
 GET request to our "Posts" collection called "Get post by ID" for getting a post by adding '/<post_id>' to the url after 'api/posts'
 you need to be logged in to see a post
-
 DELETE request to our "Posts" collection called "Delete post" for deleting a post by adding '/<post_id>' to the url after 'api/posts'
 you need to be logged in to delete the post (and you need to be the owner of the post to delete it)
-
 PUT request to our "Posts" collection called "Like post" for liking a specific post
 you need to be logged in
-
 PUT request to our "Posts" collection called "Unlike post" for unliking a specific post if it is already liked
 you need to be logged in
-
 POST request to our "Posts" collection called "Add a commentary to a post" for commenting on a specific post
 you need to be logged in
-
 DELETE request to our "Posts" collection called "Delete Comment" for deleting a specific comment on a specific post
 you need to be logged in
 */
@@ -248,7 +224,6 @@ We'll have another action to remove the alerts
 const express = require("express"); //bring in express
 const connectDB = require("./config/db"); //bring in db.js from folder 'config'
 const path = require("path");
-const cors = require('cors');
 
 const app = express(); //initialize our app with express()
 
@@ -256,7 +231,6 @@ connectDB(); // Connect Database
 
 // Init Middleware
 app.use(express.json({ extended: false }));
-app.use(cors());
 
 // Define Routes
 app.use("/api/users", require("./routes/api/users")); //this makes '/api/users' pertain to the '/' in the router.get() call in 'users.js' in 'routes/api/'
@@ -280,6 +254,9 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(process.env.PORT || 5000, function() {
-  console.log("Server is running on Port:", process.env.PORT || 5000);
-});
+const PORT = process.env.PORT || 5000;
+//process.env.PORT will look for an environment variable called PORT to use (this is where we will get the port number when we deploy to Heroku)
+//locally, however, we want it to run on port 5000 (if there is no environment variable set it will default to 5000)
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+//listen on a port and create a callback (do something when it connects, in this case console.log that the server started and which port it started on)
