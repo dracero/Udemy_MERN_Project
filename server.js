@@ -248,6 +248,7 @@ We'll have another action to remove the alerts
 const express = require("express"); //bring in express
 const connectDB = require("./config/db"); //bring in db.js from folder 'config'
 const path = require("path");
+const cors = require('cors');
 
 const app = express(); //initialize our app with express()
 
@@ -255,6 +256,7 @@ connectDB(); // Connect Database
 
 // Init Middleware
 app.use(express.json({ extended: false }));
+app.use(cors());
 
 // Define Routes
 app.use("/api/users", require("./routes/api/users")); //this makes '/api/users' pertain to the '/' in the router.get() call in 'users.js' in 'routes/api/'
@@ -278,9 +280,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const PORT = process.env.PORT || 5000;
-//process.env.PORT will look for an environment variable called PORT to use (this is where we will get the port number when we deploy to Heroku)
-//locally, however, we want it to run on port 5000 (if there is no environment variable set it will default to 5000)
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-//listen on a port and create a callback (do something when it connects, in this case console.log that the server started and which port it started on)
+app.listen(process.env.PORT || 5000, function() {
+  console.log("Server is running on Port:", process.env.PORT || 5000);
+});
