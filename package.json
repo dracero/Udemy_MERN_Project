@@ -28,7 +28,6 @@
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.1",
-    "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "request": "^2.88.0"
   },
